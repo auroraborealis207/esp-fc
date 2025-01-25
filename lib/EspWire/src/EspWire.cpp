@@ -26,6 +26,7 @@ extern "C" {
   #include <string.h>
   #include <inttypes.h>
 }
+
 #include "esp_twi.h"
 #include "EspWire.h"
 

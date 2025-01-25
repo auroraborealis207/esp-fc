@@ -1,4 +1,5 @@
-#include "platform.h"
+#include <Arduino.h>
+#include <platform.h>
 #include "Device/SerialDevice.h"
 #include "EscDriver.h"
 #include "Hal/Gpio.h"
@@ -13,11 +14,11 @@ void IOConfigGPIO(IO_t pin, uint8_t mode)
 {
     switch(mode) {
         case IOCFG_IPU:
-            Espfc::Hal::Gpio::pinMode(pin, INPUT_PULLUP);
+            ::pinMode(pin, INPUT_PULLUP);
             break;
         case IOCFG_OUT_PP:
         case IOCFG_AF_PP:
-            Espfc::Hal::Gpio::pinMode(pin, OUTPUT);
+            ::pinMode(pin, OUTPUT);
             break;
     }
 }

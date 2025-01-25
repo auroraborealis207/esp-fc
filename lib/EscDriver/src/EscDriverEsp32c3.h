@@ -39,29 +39,29 @@ class EscDriverEsp32c3: public EscDriverBase
         void reset() { *this = Item(); }
     };
 
-    using mask_t = uint32_t;
+    typedef uint32_t mask_t;
 
     EscDriverEsp32c3();
 
     int begin(const EscConfig& conf);
     void end();
-    int attach(size_t channel, int pin, int pulse);
-    int write(size_t channel, int pulse);
-    void apply();
+    int attach(size_t channel, int pin, int pulse) IRAM_ATTR;
+    int write(size_t channel, int pulse) IRAM_ATTR;
+    void apply() IRAM_ATTR;
     int pin(size_t channel) const;
     uint32_t telemetry(size_t channel) const;
-    static bool handle(void * p);
+    static bool handle(void * p) IRAM_ATTR;
 
   private:
-    void commit();
-    uint32_t usToTicks(uint32_t us);
-    uint32_t usToTicksReal(EscDriverTimer timer, uint32_t us);
-    int32_t minTicks(EscDriverTimer timer);
-    void dshotWrite();
+    void commit() IRAM_ATTR;
+    uint32_t usToTicks(uint32_t us) IRAM_ATTR;
+    uint32_t usToTicksReal(EscDriverTimer timer, uint32_t us) IRAM_ATTR;
+    int32_t minTicks(EscDriverTimer timer) IRAM_ATTR;
+    void dshotWrite() IRAM_ATTR;
 
     static void _isr_init(EscDriverTimer timer, void * driver);
-    static bool _isr_wait(EscDriverTimer timer, const uint32_t ticks);
-    static void _isr_start(EscDriverTimer timer);
+    static bool _isr_wait(EscDriverTimer timer, const uint32_t ticks) IRAM_ATTR;
+    static void _isr_start(EscDriverTimer timer) IRAM_ATTR;
     static void _isr_end(EscDriverTimer timer, void* p);
 
     volatile bool _busy;

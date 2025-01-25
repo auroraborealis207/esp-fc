@@ -5,6 +5,7 @@
 
 #include "EscDriver.h"
 #include <driver/rmt.h>
+#include "Timer.h"
 
 class EscDriverEsp32: public EscDriverBase
 {
@@ -119,6 +120,7 @@ class EscDriverEsp32: public EscDriverBase
 
     static bool _tx_end_installed;
     static EscDriverEsp32* instances[];
+    Espfc::Timer _timer;
 };
 
 #endif

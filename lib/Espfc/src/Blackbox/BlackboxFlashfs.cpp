@@ -5,12 +5,11 @@
 
 #include "Device/FlashDevice.h"
 #include "Utils/RingBuf.h"
-#include "Utils/Math.hpp"
+#include "Math/Utils.h"
 
 static const uint32_t FLASHFS_ERASED_VAL = 0xffffffff;
 
-using BufferType = Espfc::Utils::RingBuf<uint8_t, FLASHFS_WRITE_BUFFER_SIZE>;
-
+typedef Espfc::Utils::RingBuf<uint8_t, FLASHFS_WRITE_BUFFER_SIZE> BufferType;
 static BufferType buff;
 
 static FlashfsRuntime flashfs;
@@ -102,7 +101,7 @@ bool IRAM_ATTR flashfsFlushAsync(bool force)
     const size_t size = buffer->size();
     if(flashfs.partition && size > 0)
     {
-        //uint32_t newAddress = force ? (flashfs.address + size) : Espfc::Utils::alignAddressToWrite(flashfs.address, size, FLASHFS_FLUSH_BUFFER_SIZE);
+        //uint32_t newAddress = force ? (flashfs.address + size) : Espfc::Math::alignAddressToWrite(flashfs.address, size, FLASHFS_FLUSH_BUFFER_SIZE);
         //size_t toWrite = newAddress - flashfs.address;
         uint8_t tmp[FLASHFS_FLUSH_BUFFER_SIZE];
         size_t chunks = (size / FLASHFS_FLUSH_BUFFER_SIZE) + 1;

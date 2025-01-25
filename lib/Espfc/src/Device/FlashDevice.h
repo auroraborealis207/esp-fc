@@ -1,7 +1,9 @@
 #pragma once
 
+#include <Arduino.h>
+#include <platform.h>
 #include <algorithm>
-#include <esp_partition.h>
+#include "esp_partition.h"
 
 namespace Espfc {
 

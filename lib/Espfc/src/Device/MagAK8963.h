@@ -81,7 +81,7 @@ class MagAK8963: public MagDevice
 
     const VectorFloat convert(const VectorInt16& v) const override
     {
-      return static_cast<VectorFloat>(v) * scale;
+      return (VectorFloat)v * scale;
     }
 
     int getRate() const override

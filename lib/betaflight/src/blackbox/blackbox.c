@@ -1319,12 +1319,11 @@ STATIC_UNIT_TESTED char *blackboxGetStartDateTime(char *buf)
     // when time is not known.
     rtcGetDateTime(&dt);
     dateTimeFormatLocal(buf, &dt);
-    
-    return buf;
 #else
-    static char b[] = "0000-01-01T00:00:00.000";
-    return b;
+    buf = "0000-01-01T00:00:00.000";
 #endif
+
+    return buf;
 }
 
 #ifndef BLACKBOX_PRINT_HEADER_LINE

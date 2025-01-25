@@ -1,7 +1,6 @@
 #if defined(ESP32C3)
 
 #include "EscDriverEsp32c3.h"
-#include <Arduino.h>
 #include <driver/timer.h>
 #include <algorithm>
 
@@ -19,12 +18,12 @@ void EscDriverEsp32c3::_isr_init(EscDriverTimer timer, void * driver)
 {
   timer_group_t group = (timer_group_t)timer;
   timer_config_t config = {
-    .alarm_en = TIMER_ALARM_EN,
-    .counter_en = TIMER_PAUSE,
-    .intr_type = TIMER_INTR_LEVEL,
-    .counter_dir = TIMER_COUNT_UP,
-    .auto_reload = TIMER_AUTORELOAD_DIS,
-    .divider = ESC_TIMER_DIVIDER,
+      .alarm_en = TIMER_ALARM_EN,
+      .counter_en = TIMER_PAUSE,
+      .intr_type = TIMER_INTR_LEVEL,
+      .counter_dir = TIMER_COUNT_UP,
+      .auto_reload = TIMER_AUTORELOAD_DIS,
+      .divider = ESC_TIMER_DIVIDER,
   };
   timer_init(group, ESC_TIMER_IDX, &config);
   timer_set_counter_value(group, ESC_TIMER_IDX, 0);
@@ -33,7 +32,7 @@ void EscDriverEsp32c3::_isr_init(EscDriverTimer timer, void * driver)
   timer_start(group, ESC_TIMER_IDX);
 }
 
-bool IRAM_ATTR EscDriverEsp32c3::_isr_wait(EscDriverTimer timer, const uint32_t ticks)
+bool EscDriverEsp32c3::_isr_wait(EscDriverTimer timer, const uint32_t ticks)
 {
   if(ticks >= TIMER_WAIT_EDGE) { // yield
     uint64_t value = timer_group_get_counter_value_in_isr((timer_group_t)timer, ESC_TIMER_IDX);
@@ -54,7 +53,7 @@ bool IRAM_ATTR EscDriverEsp32c3::_isr_wait(EscDriverTimer timer, const uint32_t 
 }
 
 // run as soon as possible
-void IRAM_ATTR EscDriverEsp32c3::_isr_start(EscDriverTimer timer)
+void EscDriverEsp32c3::_isr_start(EscDriverTimer timer)
 {
   _isr_wait(timer, TIMER_WAIT_EDGE + 10);
   //timer_start((timer_group_t)timer, ESC_TIMER_IDX);
@@ -66,7 +65,7 @@ void EscDriverEsp32c3::_isr_end(EscDriverTimer timer, void* p)
   timer_disable_intr((timer_group_t)timer, ESC_TIMER_IDX);
 }
 
-int IRAM_ATTR EscDriverEsp32c3::attach(size_t channel, int pin, int pulse)
+int EscDriverEsp32c3::attach(size_t channel, int pin, int pulse)
 {
   if(channel < 0 || channel >= ESC_CHANNEL_COUNT) return 0;
   _slots[channel].pin = pin;
@@ -76,7 +75,7 @@ int IRAM_ATTR EscDriverEsp32c3::attach(size_t channel, int pin, int pulse)
   return 1;
 }
 
-int IRAM_ATTR EscDriverEsp32c3::write(size_t channel, int pulse)
+int EscDriverEsp32c3::write(size_t channel, int pulse)
 {
   if(channel < 0 || channel >= ESC_CHANNEL_COUNT) return 0;
   _slots[channel].pulse = usToTicks(pulse);
@@ -94,7 +93,7 @@ uint32_t EscDriverEsp32c3::telemetry(size_t channel) const
   return 0;
 }
 
-void IRAM_ATTR EscDriverEsp32c3::apply()
+void EscDriverEsp32c3::apply()
 {
   if(_protocol == ESC_PROTOCOL_DISABLED) return;
   if(_protocol >= ESC_PROTOCOL_DSHOT150)
@@ -106,7 +105,7 @@ void IRAM_ATTR EscDriverEsp32c3::apply()
   _isr_start(_timer);
 }
 
-bool IRAM_ATTR EscDriverEsp32c3::handle(void * p)
+bool EscDriverEsp32c3::handle(void * p)
 {
   // Time critical section
   EscDriver * instance = (EscDriver *)p;
@@ -146,7 +145,7 @@ bool IRAM_ATTR EscDriverEsp32c3::handle(void * p)
   return false;
 }
 
-void IRAM_ATTR EscDriverEsp32c3::commit()
+void EscDriverEsp32c3::commit()
 {
   Slot sorted[ESC_CHANNEL_COUNT];
   std::copy(_slots, _slots + ESC_CHANNEL_COUNT, sorted);
@@ -209,17 +208,17 @@ void IRAM_ATTR EscDriverEsp32c3::commit()
   }
 }
 
-uint32_t IRAM_ATTR EscDriverEsp32c3::usToTicksReal(EscDriverTimer timer, uint32_t us)
+uint32_t EscDriverEsp32c3::usToTicksReal(EscDriverTimer timer, uint32_t us)
 {
   return (APB_CLK_FREQ / ESC_TIMER_DIVIDER / 1000000L) * us;
 }
 
-int32_t IRAM_ATTR EscDriverEsp32c3::minTicks(EscDriverTimer timer)
+int32_t EscDriverEsp32c3::minTicks(EscDriverTimer timer)
 {
   return 150L;
 }
 
-uint32_t IRAM_ATTR EscDriverEsp32c3::usToTicks(uint32_t us)
+uint32_t EscDriverEsp32c3::usToTicks(uint32_t us)
 {
   uint32_t ticks = 0;
   switch(_protocol)
@@ -313,7 +312,7 @@ static inline void dshotDelay(int delay)
   while(delay--) __asm__ __volatile__ ("nop");
 }
 
-void IRAM_ATTR EscDriverEsp32c3::dshotWrite()
+void EscDriverEsp32c3::dshotWrite()
 {
   // zero mask arrays
   mask_t * sm = dshotSetMask;

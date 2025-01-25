@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Model.h"
-#include "Control/Fusion.h"
+#include "Fusion.h"
 #include "Sensor/GyroSensor.h"
 #include "Sensor/AccelSensor.h"
 #include "Sensor/MagSensor.h"
@@ -32,7 +32,7 @@ class SensorManager
     Sensor::MagSensor _mag;
     Sensor::BaroSensor _baro;
     Sensor::VoltageSensor _voltage;
-    Control::Fusion _fusion;
+    Fusion _fusion;
     bool _fusionUpdate;
 };
 

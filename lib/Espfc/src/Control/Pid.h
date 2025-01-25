@@ -1,26 +1,25 @@
 #pragma once
 
 #include <cstdint>
-#include "Utils/Filter.h"
-#include "Utils/Math.hpp"
-
-namespace Espfc {
+#include "Filter.h"
 
 // bataflight scalers
-constexpr float PTERM_SCALE_BETAFLIGHT = 0.032029f;
-constexpr float ITERM_SCALE_BETAFLIGHT = 0.244381f;
-constexpr float DTERM_SCALE_BETAFLIGHT = 0.000529f;
-constexpr float FTERM_SCALE_BETAFLIGHT = 0.00013754f;
+#define PTERM_SCALE_BETAFLIGHT 0.032029f
+#define ITERM_SCALE_BETAFLIGHT 0.244381f
+#define DTERM_SCALE_BETAFLIGHT 0.000529f
+#define FTERM_SCALE_BETAFLIGHT 0.00013754f
 
-constexpr float PTERM_SCALE = PTERM_SCALE_BETAFLIGHT * Utils::toDeg(1.0f) * 0.001f; // ~ 0.00183 = 0.032029f * 57.29 / 1000
-constexpr float ITERM_SCALE = ITERM_SCALE_BETAFLIGHT * Utils::toDeg(1.0f) * 0.001f; // ~ 0.014f
-constexpr float DTERM_SCALE = DTERM_SCALE_BETAFLIGHT * Utils::toDeg(1.0f) * 0.001f; // ~ 0.0000303f
-constexpr float FTERM_SCALE = FTERM_SCALE_BETAFLIGHT * Utils::toDeg(1.0f) * 0.001f; // ~ 0.00000788f
+#define PTERM_SCALE (PTERM_SCALE_BETAFLIGHT * RAD_TO_DEG * 0.001f) // ~ 0.00183 = 0.032029f * 57.29 / 1000
+#define ITERM_SCALE (ITERM_SCALE_BETAFLIGHT * RAD_TO_DEG * 0.001f) // ~ 0.014f
+#define DTERM_SCALE (DTERM_SCALE_BETAFLIGHT * RAD_TO_DEG * 0.001f) // ~ 0.0000303f
+#define FTERM_SCALE (FTERM_SCALE_BETAFLIGHT * RAD_TO_DEG * 0.001f) //
 
-constexpr float LEVEL_PTERM_SCALE = 0.1f;    // 1/10
-constexpr float LEVEL_ITERM_SCALE = 0.1f;    // 1/10
-constexpr float LEVEL_DTERM_SCALE = 0.001f;  // 1/1000
-constexpr float LEVEL_FTERM_SCALE = 0.001f;  // 1/1000
+#define LEVEL_PTERM_SCALE 0.1f    // 1/10
+#define LEVEL_ITERM_SCALE 0.1f    // 1/10
+#define LEVEL_DTERM_SCALE 0.001f  // 1/1000
+#define LEVEL_FTERM_SCALE 0.001f  // 1/1000
+
+namespace Espfc {
 
 enum ItermRelaxType {
   ITERM_RELAX_OFF,
@@ -64,12 +63,12 @@ class Pid
     float dTerm;
     float fTerm;
 
-    Utils::Filter dtermFilter;
-    Utils::Filter dtermFilter2;
-    Utils::Filter dtermNotchFilter;
-    Utils::Filter ptermFilter;
-    Utils::Filter ftermFilter;
-    Utils::Filter itermRelaxFilter;
+    Filter dtermFilter;
+    Filter dtermFilter2;
+    Filter dtermNotchFilter;
+    Filter ptermFilter;
+    Filter ftermFilter;
+    Filter itermRelaxFilter;
 
     float prevMeasurement;
     float prevError;
